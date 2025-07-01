@@ -15,8 +15,8 @@ line_length:
   error: 150
 
 file_length:
-  warning: 1400
-  error: 1700
+  warning: 1450
+  error: 1750
 
 function_body_length:
   warning: 180

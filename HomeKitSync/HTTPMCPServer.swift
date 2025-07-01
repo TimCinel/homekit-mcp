@@ -557,7 +557,9 @@ class HTTPMCPServer: NSObject, HMHomeManagerDelegate {
                     "uuid": accessory.uniqueIdentifier.uuidString,
                     "home": home.name,
                     "category": categoryName,
-                    "reachable": accessory.isReachable
+                    "reachable": accessory.isReachable,
+                    "firmware": getAccessoryFirmware(accessory),
+                    "serial_number": getAccessorySerialNumber(accessory)
                 ])
             }
         }
@@ -571,7 +573,9 @@ class HTTPMCPServer: NSObject, HMHomeManagerDelegate {
                            let category = acc["category"] as! String
                            let room = acc["room"] as! String
                            let uuid = acc["uuid"] as! String
-                           return "• \(name) (\(category)) - Room: \(room), UUID: \(uuid)"
+                           let firmware = acc["firmware"] as! String
+                           let serialNumber = acc["serial_number"] as! String
+                           return "• \(name) (\(category)) - Room: \(room), UUID: \(uuid), FW: \(firmware), S/N: \(serialNumber)"
                        }.joined(separator: "\n")
             ]
         ]
@@ -586,6 +590,34 @@ class HTTPMCPServer: NSObject, HMHomeManagerDelegate {
     private func getCategoryName(for category: HMAccessoryCategory) -> String {
         // Use the localized description from HomeKit which gives us human-readable names
         return category.localizedDescription
+    }
+    
+    private func getAccessoryFirmware(_ accessory: HMAccessory) -> String {
+        // Look for firmware version in accessory information service
+        for service in accessory.services {
+            if service.serviceType == HMServiceTypeAccessoryInformation {
+                for characteristic in service.characteristics {
+                    if characteristic.characteristicType == HMCharacteristicTypeFirmwareVersion {
+                        return characteristic.value as? String ?? "Unknown"
+                    }
+                }
+            }
+        }
+        return "Unknown"
+    }
+    
+    private func getAccessorySerialNumber(_ accessory: HMAccessory) -> String {
+        // Look for serial number in accessory information service
+        for service in accessory.services {
+            if service.serviceType == HMServiceTypeAccessoryInformation {
+                for characteristic in service.characteristics {
+                    if characteristic.characteristicType == HMCharacteristicTypeSerialNumber {
+                        return characteristic.value as? String ?? "Unknown"
+                    }
+                }
+            }
+        }
+        return "Unknown"
     }
     
     private func handleGetAllRooms(_ request: MCPRequest) -> MCPResponse {
@@ -1046,7 +1078,9 @@ class HTTPMCPServer: NSObject, HMHomeManagerDelegate {
                 "name": accessory.name,
                 "uuid": accessory.uniqueIdentifier.uuidString,
                 "category": categoryName,
-                "reachable": accessory.isReachable
+                "reachable": accessory.isReachable,
+                "firmware": getAccessoryFirmware(accessory),
+                "serial_number": getAccessorySerialNumber(accessory)
             ])
         }
         
@@ -1061,8 +1095,10 @@ class HTTPMCPServer: NSObject, HMHomeManagerDelegate {
                           let category = acc["category"] as! String
                           let uuid = acc["uuid"] as! String
                           let reachable = acc["reachable"] as! Bool
+                          let firmware = acc["firmware"] as! String
+                          let serialNumber = acc["serial_number"] as! String
                           let status = reachable ? "🟢" : "🔴"
-                          return "• \(name) (\(category)) \(status) - UUID: \(uuid)"
+                          return "• \(name) (\(category)) \(status) - UUID: \(uuid), FW: \(firmware), S/N: \(serialNumber)"
                       }.joined(separator: "\n")
             ]
         ]

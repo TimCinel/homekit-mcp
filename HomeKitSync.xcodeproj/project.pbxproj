@@ -1,0 +1,469 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		D12345678901234567890123 /* MCPApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D12345678901234567890124 /* MCPApp.swift */; };
+		D12345678901234567890143 /* MCPServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D12345678901234567890144 /* MCPServer.swift */; };
+		D12345678901234567890147 /* HTTPMCPServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D12345678901234567890148 /* HTTPMCPServer.swift */; };
+		D12345678901234567890149 /* HTTPMCPServerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D12345678901234567890150 /* HTTPMCPServerTests.swift */; };
+		D12345678901234567890151 /* HomeKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D12345678901234567890152 /* HomeKitManager.swift */; };
+		D12345678901234567890164 /* CITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D12345678901234567890165 /* CITests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		D12345678901234567890124 /* MCPApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MCPApp.swift; sourceTree = "<group>"; };
+		D12345678901234567890144 /* MCPServer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MCPServer.swift; sourceTree = "<group>"; };
+		D12345678901234567890148 /* HTTPMCPServer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPMCPServer.swift; sourceTree = "<group>"; };
+		D12345678901234567890152 /* HomeKitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeKitManager.swift; sourceTree = "<group>"; };
+		D12345678901234567890126 /* HomeKitMCP.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HomeKitMCP.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		D12345678901234567890127 /* HomeKitSync.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = HomeKitSync.entitlements; sourceTree = "<group>"; };
+		D12345678901234567890145 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D12345678901234567890150 /* HTTPMCPServerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPMCPServerTests.swift; sourceTree = "<group>"; };
+		D12345678901234567890153 /* HomeKitSyncTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HomeKitSyncTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		D12345678901234567890165 /* CITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CITests.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXContainerItemProxy section */
+		D12345678901234567890154 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D12345678901234567890135 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D12345678901234567890132;
+			remoteInfo = HomeKitSync;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		D12345678901234567890128 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D12345678901234567890155 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		D12345678901234567890129 = {
+			isa = PBXGroup;
+			children = (
+				D12345678901234567890130 /* HomeKitSync */,
+				D12345678901234567890156 /* HomeKitSyncTests */,
+				D12345678901234567890131 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		D12345678901234567890130 /* HomeKitSync */ = {
+			isa = PBXGroup;
+			children = (
+				D12345678901234567890124 /* MCPApp.swift */,
+				D12345678901234567890144 /* MCPServer.swift */,
+				D12345678901234567890148 /* HTTPMCPServer.swift */,
+				D12345678901234567890152 /* HomeKitManager.swift */,
+				D12345678901234567890127 /* HomeKitSync.entitlements */,
+				D12345678901234567890145 /* Info.plist */,
+			);
+			path = HomeKitSync;
+			sourceTree = "<group>";
+		};
+		D12345678901234567890131 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				D12345678901234567890126 /* HomeKitMCP.app */,
+				D12345678901234567890153 /* HomeKitSyncTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		D12345678901234567890156 /* HomeKitSyncTests */ = {
+			isa = PBXGroup;
+			children = (
+				D12345678901234567890150 /* HTTPMCPServerTests.swift */,
+				D12345678901234567890165 /* CITests.swift */,
+			);
+			path = HomeKitSyncTests;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		D12345678901234567890132 /* HomeKitSync */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D12345678901234567890133 /* Build configuration list for PBXNativeTarget "HomeKitSync" */;
+			buildPhases = (
+				D12345678901234567890134 /* Sources */,
+				D12345678901234567890128 /* Frameworks */,
+				D12345678901234567890146 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = HomeKitSync;
+			productName = HomeKitSync;
+			productReference = D12345678901234567890126 /* HomeKitMCP.app */;
+			productType = "com.apple.product-type.application";
+		};
+		D12345678901234567890157 /* HomeKitSyncTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D12345678901234567890158 /* Build configuration list for PBXNativeTarget "HomeKitSyncTests" */;
+			buildPhases = (
+				D12345678901234567890159 /* Sources */,
+				D12345678901234567890155 /* Frameworks */,
+				D12345678901234567890160 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				D12345678901234567890161 /* PBXTargetDependency */,
+			);
+			name = HomeKitSyncTests;
+			productName = HomeKitSyncTests;
+			productReference = D12345678901234567890153 /* HomeKitSyncTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		D12345678901234567890135 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1500;
+				LastUpgradeCheck = 1500;
+				TargetAttributes = {
+					D12345678901234567890132 = {
+						CreatedOnToolsVersion = 15.0;
+					};
+					D12345678901234567890157 = {
+						CreatedOnToolsVersion = 15.0;
+						TestTargetID = D12345678901234567890132;
+					};
+				};
+			};
+			buildConfigurationList = D12345678901234567890136 /* Build configuration list for PBXProject "HomeKitSync" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = D12345678901234567890129;
+			productRefGroup = D12345678901234567890131 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				D12345678901234567890132 /* HomeKitSync */,
+				D12345678901234567890157 /* HomeKitSyncTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		D12345678901234567890146 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D12345678901234567890160 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		D12345678901234567890134 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D12345678901234567890123 /* MCPApp.swift in Sources */,
+				D12345678901234567890143 /* MCPServer.swift in Sources */,
+				D12345678901234567890147 /* HTTPMCPServer.swift in Sources */,
+				D12345678901234567890151 /* HomeKitManager.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D12345678901234567890159 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D12345678901234567890149 /* HTTPMCPServerTests.swift in Sources */,
+				D12345678901234567890164 /* CITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		D12345678901234567890161 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D12345678901234567890132 /* HomeKitSync */;
+			targetProxy = D12345678901234567890154 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		D12345678901234567890137 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		D12345678901234567890138 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+			};
+			name = Release;
+		};
+		D12345678901234567890139 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = HomeKitSync/HomeKitSync.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = BJQXT5H782;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = HomeKitSync/Info.plist;
+				INFOPLIST_KEY_NSHomeKitUsageDescription = "HomeKitMCP needs access to your HomeKit accessories.";
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.timcinel.homekitmcp;
+				PRODUCT_NAME = HomeKitMCP;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SUPPORTS_MACCATALYST = YES;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		D12345678901234567890140 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = HomeKitSync/HomeKitSync.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = BJQXT5H782;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = HomeKitSync/Info.plist;
+				INFOPLIST_KEY_NSHomeKitUsageDescription = "HomeKitMCP needs access to your HomeKit accessories.";
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.timcinel.homekitmcp;
+				PRODUCT_NAME = HomeKitMCP;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SUPPORTS_MACCATALYST = YES;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		D12345678901234567890162 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = BJQXT5H782;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.timcinel.homekitmcp.HomeKitSyncTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SUPPORTS_MACCATALYST = YES;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/HomeKitMCP.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/HomeKitMCP";
+			};
+			name = Debug;
+		};
+		D12345678901234567890163 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = BJQXT5H782;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.timcinel.homekitmcp.HomeKitSyncTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SUPPORTS_MACCATALYST = YES;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/HomeKitMCP.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/HomeKitMCP";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		D12345678901234567890133 /* Build configuration list for PBXNativeTarget "HomeKitSync" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D12345678901234567890139 /* Debug */,
+				D12345678901234567890140 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D12345678901234567890136 /* Build configuration list for PBXProject "HomeKitSync" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D12345678901234567890137 /* Debug */,
+				D12345678901234567890138 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D12345678901234567890158 /* Build configuration list for PBXNativeTarget "HomeKitSyncTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D12345678901234567890162 /* Debug */,
+				D12345678901234567890163 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = D12345678901234567890135 /* Project object */;
+}

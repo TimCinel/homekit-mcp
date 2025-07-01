@@ -1,0 +1,49 @@
+# SwiftLint configuration for HomeKit MCP Server
+
+included:
+  - HomeKitSync
+  - HomeKitSyncTests
+
+excluded:
+  - Pods
+  - DerivedData
+  - Build
+
+# Rule configuration
+line_length:
+  warning: 120
+  error: 150
+
+file_length:
+  warning: 500
+  error: 800
+
+function_body_length:
+  warning: 80
+  error: 120
+
+type_body_length:
+  warning: 400
+  error: 700
+
+# Disabled rules
+disabled_rules:
+  - trailing_whitespace
+  - force_cast
+  - force_try
+
+# Enabled opt-in rules
+opt_in_rules:
+  - empty_count
+  - closure_spacing
+  - explicit_init
+  - fatal_error_message
+  - first_where
+  - force_unwrapping
+  - implicitly_unwrapped_optional
+  - overridden_super_call
+  - redundant_nil_coalescing
+  - sorted_imports
+  - unneeded_parentheses_in_closure_argument
+
+# Custom rules can be added here as needed

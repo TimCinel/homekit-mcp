@@ -1,0 +1,71 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, master, develop ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+  schedule:
+    - cron: "0 0 * * *"  # Daily at midnight UTC
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: macos-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Install SwiftLint
+      run: brew install swiftlint
+    
+    - name: Run SwiftLint
+      run: make lint
+
+  test-macos:
+    name: Test (macOS)
+    runs-on: macos-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Swift
+      uses: swift-actions/setup-swift@v1
+      with:
+        swift-version: "5.9"
+    
+    - name: Run CI Tests
+      run: make test-ci
+      
+    - name: Validate Swift Package
+      run: |
+        swift package describe
+        swift build
+
+
+  build-validation:
+    name: Build Validation
+    runs-on: macos-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Xcode
+      uses: maxim-lobanov/setup-xcode@v1
+      with:
+        xcode-version: latest-stable
+        
+    - name: Validate Xcode Project
+      run: |
+        xcodebuild -list
+        xcodebuild -project HomeKitSync.xcodeproj -scheme HomeKitSync -destination 'platform=macOS,variant=Mac Catalyst' -dry-run
+      continue-on-error: true  # HomeKit signing issues expected in CI
+      
+    - name: Check Project Structure
+      run: |
+        ls -la
+        find . -name "*.swift" | head -10

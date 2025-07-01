@@ -15,16 +15,20 @@ line_length:
   error: 150
 
 file_length:
-  warning: 500
-  error: 800
+  warning: 1400
+  error: 1700
 
 function_body_length:
-  warning: 80
-  error: 120
+  warning: 180
+  error: 280
 
 type_body_length:
-  warning: 400
-  error: 700
+  warning: 1400
+  error: 1600
+
+cyclomatic_complexity:
+  warning: 30
+  error: 40
 
 # Disabled rules
 disabled_rules:

@@ -46,7 +46,16 @@ claude mcp add --transport http homekit http://localhost:8080/mcp
 |------|-------------|------------|
 | `get_all_accessories` | List all HomeKit accessories with names, rooms, categories, and UUIDs | None |
 | `get_all_rooms` | List all HomeKit rooms with names and UUIDs | None |
-| `set_accessory_room` | Move an accessory to a different room | `accessory_uuid`, `room_uuid` |
+| `set_accessory_room` | Move an accessory to a different room using UUIDs | `accessory_uuid`, `room_uuid` |
+| `get_accessory_by_name` | Find a HomeKit accessory by name | `name` |
+| `get_room_by_name` | Find a HomeKit room by name | `name` |
+| `set_accessory_room_by_name` | Move an accessory to a different room using names | `accessory_name`, `room_name` |
+| `rename_accessory` | Rename a HomeKit accessory | `accessory_name`, `new_name` |
+| `rename_room` | Rename a HomeKit room | `room_name`, `new_name` |
+| `get_room_accessories` | Get all accessories in a specific room | `room_name` |
+| `accessory_on` | Turn on an accessory (lights, switches) or open covers | `accessory_name` |
+| `accessory_off` | Turn off an accessory (lights, switches) or close covers | `accessory_name` |
+| `accessory_toggle` | Toggle an accessory between on/off or open/close | `accessory_name` |
 
 ## Development
 
@@ -107,5 +116,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 **Server not reachable**
 - Ensure app is running and visible in Dock
-- Check firewall settings for port 8080
-- Verify server logs in Console.app (search for "MCP")
+- Verify server logs in Console.app (search for "MCP") or run `log stream --info --process $(ps aux | grep MCP | grep -v grep | awk '{ print $2 }')`

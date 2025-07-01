@@ -346,7 +346,7 @@ class HTTPMCPServer: NSObject, HMHomeManagerDelegate {
             ],
             [
                 "name": "set_accessory_room",
-                "description": "Move an accessory to a different room",
+                "description": "Move an accessory to a different room using UUIDs",
                 "inputSchema": [
                     "type": "object",
                     "properties": [
@@ -360,6 +360,144 @@ class HTTPMCPServer: NSObject, HMHomeManagerDelegate {
                         ]
                     ],
                     "required": ["accessory_uuid", "room_uuid"]
+                ]
+            ],
+            [
+                "name": "get_accessory_by_name",
+                "description": "Find a HomeKit accessory by name",
+                "inputSchema": [
+                    "type": "object",
+                    "properties": [
+                        "name": [
+                            "type": "string",
+                            "description": "Name or partial name of the accessory to find"
+                        ]
+                    ],
+                    "required": ["name"]
+                ]
+            ],
+            [
+                "name": "get_room_by_name",
+                "description": "Find a HomeKit room by name",
+                "inputSchema": [
+                    "type": "object",
+                    "properties": [
+                        "name": [
+                            "type": "string",
+                            "description": "Name or partial name of the room to find"
+                        ]
+                    ],
+                    "required": ["name"]
+                ]
+            ],
+            [
+                "name": "set_accessory_room_by_name",
+                "description": "Move an accessory to a different room using names",
+                "inputSchema": [
+                    "type": "object",
+                    "properties": [
+                        "accessory_name": [
+                            "type": "string",
+                            "description": "Name of the accessory to move"
+                        ],
+                        "room_name": [
+                            "type": "string",
+                            "description": "Name of the target room"
+                        ]
+                    ],
+                    "required": ["accessory_name", "room_name"]
+                ]
+            ],
+            [
+                "name": "rename_accessory",
+                "description": "Rename a HomeKit accessory",
+                "inputSchema": [
+                    "type": "object",
+                    "properties": [
+                        "accessory_name": [
+                            "type": "string",
+                            "description": "Current name of the accessory to rename"
+                        ],
+                        "new_name": [
+                            "type": "string",
+                            "description": "New name for the accessory"
+                        ]
+                    ],
+                    "required": ["accessory_name", "new_name"]
+                ]
+            ],
+            [
+                "name": "rename_room",
+                "description": "Rename a HomeKit room",
+                "inputSchema": [
+                    "type": "object",
+                    "properties": [
+                        "room_name": [
+                            "type": "string",
+                            "description": "Current name of the room to rename"
+                        ],
+                        "new_name": [
+                            "type": "string",
+                            "description": "New name for the room"
+                        ]
+                    ],
+                    "required": ["room_name", "new_name"]
+                ]
+            ],
+            [
+                "name": "get_room_accessories",
+                "description": "Get all accessories in a specific room",
+                "inputSchema": [
+                    "type": "object",
+                    "properties": [
+                        "room_name": [
+                            "type": "string",
+                            "description": "Name of the room to get accessories from"
+                        ]
+                    ],
+                    "required": ["room_name"]
+                ]
+            ],
+            [
+                "name": "accessory_on",
+                "description": "Turn on an accessory (lights, switches) or open covers",
+                "inputSchema": [
+                    "type": "object",
+                    "properties": [
+                        "accessory_name": [
+                            "type": "string",
+                            "description": "Name of the accessory to turn on"
+                        ]
+                    ],
+                    "required": ["accessory_name"]
+                ]
+            ],
+            [
+                "name": "accessory_off",
+                "description": "Turn off an accessory (lights, switches) or close covers",
+                "inputSchema": [
+                    "type": "object",
+                    "properties": [
+                        "accessory_name": [
+                            "type": "string",
+                            "description": "Name of the accessory to turn off"
+                        ]
+                    ],
+                    "required": ["accessory_name"]
+                ]
+            ],
+            [
+                "name": "accessory_toggle",
+                "description": "Toggle an accessory (lights, switches, covers) between on/off or open/close",
+                "inputSchema": [
+                    "type": "object",
+                    "properties": [
+                        "accessory_name": [
+                            "type": "string",
+                            "description": "Name of the accessory to toggle"
+                        ]
+                    ],
+                    "required": ["accessory_name"]
                 ]
             ]
         ]
@@ -383,6 +521,24 @@ class HTTPMCPServer: NSObject, HMHomeManagerDelegate {
             return handleGetAllRooms(request)
         case "set_accessory_room":
             return handleSetAccessoryRoom(request, arguments: arguments)
+        case "get_accessory_by_name":
+            return handleGetAccessoryByName(request, arguments: arguments)
+        case "get_room_by_name":
+            return handleGetRoomByName(request, arguments: arguments)
+        case "set_accessory_room_by_name":
+            return handleSetAccessoryRoomByName(request, arguments: arguments)
+        case "rename_accessory":
+            return handleRenameAccessory(request, arguments: arguments)
+        case "rename_room":
+            return handleRenameRoom(request, arguments: arguments)
+        case "get_room_accessories":
+            return handleGetRoomAccessories(request, arguments: arguments)
+        case "accessory_on":
+            return handleAccessoryOn(request, arguments: arguments)
+        case "accessory_off":
+            return handleAccessoryOff(request, arguments: arguments)
+        case "accessory_toggle":
+            return handleAccessoryToggle(request, arguments: arguments)
         default:
             return MCPResponse(jsonrpc: "2.0", id: request.id, result: nil,
                               error: MCPError(code: -32601, message: "Tool not found"))
@@ -567,6 +723,548 @@ class HTTPMCPServer: NSObject, HMHomeManagerDelegate {
         ]
         
         print("📤 [MCP] Returning result: \(moveResult)")
+        return MCPResponse(jsonrpc: "2.0", id: request.id, 
+                          result: ["content": AnyEncodable(content)], error: nil)
+    }
+    
+    private func handleGetAccessoryByName(_ request: MCPRequest, arguments: [String: Any]) -> MCPResponse {
+        guard let name = arguments["name"] as? String else {
+            return MCPResponse(jsonrpc: "2.0", id: request.id, result: nil,
+                              error: MCPError(code: -32602, message: "Missing 'name' parameter"))
+        }
+        
+        var foundAccessories: [[String: Any]] = []
+        
+        for home in homeManager.homes {
+            for accessory in home.accessories where accessory.name.lowercased().contains(name.lowercased()) {
+                let categoryName = getCategoryName(for: accessory.category)
+                foundAccessories.append([
+                    "name": accessory.name,
+                    "room": accessory.room?.name ?? "No Room",
+                    "uuid": accessory.uniqueIdentifier.uuidString,
+                    "home": home.name,
+                    "category": categoryName,
+                    "reachable": accessory.isReachable
+                ])
+            }
+        }
+        
+        let content = [
+            [
+                "type": "text",
+                "text": foundAccessories.isEmpty 
+                    ? "No accessories found matching '\(name)'"
+                    : "Found \(foundAccessories.count) accessories matching '\(name)':\n" + 
+                      foundAccessories.map { acc in
+                          let name = acc["name"] as! String
+                          let category = acc["category"] as! String
+                          let room = acc["room"] as! String
+                          let uuid = acc["uuid"] as! String
+                          return "• \(name) (\(category)) - Room: \(room), UUID: \(uuid)"
+                      }.joined(separator: "\n")
+            ]
+        ]
+        
+        return MCPResponse(jsonrpc: "2.0", id: request.id, 
+                          result: [
+                            "content": AnyEncodable(content),
+                            "_meta": AnyEncodable(["accessories": foundAccessories])
+                          ], error: nil)
+    }
+    
+    private func handleGetRoomByName(_ request: MCPRequest, arguments: [String: Any]) -> MCPResponse {
+        guard let name = arguments["name"] as? String else {
+            return MCPResponse(jsonrpc: "2.0", id: request.id, result: nil,
+                              error: MCPError(code: -32602, message: "Missing 'name' parameter"))
+        }
+        
+        var foundRooms: [[String: Any]] = []
+        
+        for home in homeManager.homes {
+            for room in home.rooms where room.name.lowercased().contains(name.lowercased()) {
+                foundRooms.append([
+                    "name": room.name,
+                    "uuid": room.uniqueIdentifier.uuidString,
+                    "home": home.name
+                ])
+            }
+        }
+        
+        let content = [
+            [
+                "type": "text",
+                "text": foundRooms.isEmpty 
+                    ? "No rooms found matching '\(name)'"
+                    : "Found \(foundRooms.count) rooms matching '\(name)':\n" + 
+                      foundRooms.map { room in
+                          "• \(room["name"] as! String) (UUID: \(room["uuid"] as! String))"
+                      }.joined(separator: "\n")
+            ]
+        ]
+        
+        return MCPResponse(jsonrpc: "2.0", id: request.id, 
+                          result: [
+                            "content": AnyEncodable(content),
+                            "_meta": AnyEncodable(["rooms": foundRooms])
+                          ], error: nil)
+    }
+    
+    private func handleSetAccessoryRoomByName(_ request: MCPRequest, arguments: [String: Any]) -> MCPResponse {
+        guard let accessoryName = arguments["accessory_name"] as? String,
+              let roomName = arguments["room_name"] as? String else {
+            return MCPResponse(jsonrpc: "2.0", id: request.id, result: nil,
+                              error: MCPError(code: -32602, message: "Missing 'accessory_name' or 'room_name' parameter"))
+        }
+        
+        // Find accessory by name
+        var foundAccessory: HMAccessory?
+        var foundHome: HMHome?
+        
+        for home in homeManager.homes {
+            if let accessory = home.accessories.first(where: { $0.name.lowercased().contains(accessoryName.lowercased()) }) {
+                foundAccessory = accessory
+                foundHome = home
+                break
+            }
+        }
+        
+        guard let accessory = foundAccessory, let home = foundHome else {
+            return MCPResponse(jsonrpc: "2.0", id: request.id, result: nil,
+                              error: MCPError(code: -32603, message: "Accessory '\(accessoryName)' not found"))
+        }
+        
+        // Find room by name
+        var foundRoom: HMRoom?
+        
+        for homeItem in homeManager.homes {
+            if let room = homeItem.rooms.first(where: { $0.name.lowercased().contains(roomName.lowercased()) }) {
+                foundRoom = room
+                break
+            }
+        }
+        
+        guard let room = foundRoom else {
+            return MCPResponse(jsonrpc: "2.0", id: request.id, result: nil,
+                              error: MCPError(code: -32603, message: "Room '\(roomName)' not found"))
+        }
+        
+        // Check if accessory is already in target room
+        if accessory.room?.uniqueIdentifier == room.uniqueIdentifier {
+            let result = "ℹ️ \(accessory.name) is already in \(room.name)"
+            let content = [["type": "text", "text": result]]
+            return MCPResponse(jsonrpc: "2.0", id: request.id, 
+                              result: ["content": AnyEncodable(content)], error: nil)
+        }
+        
+        // Move the accessory
+        let moveResult: String
+        let group = DispatchGroup()
+        var asyncResult: String = ""
+        var operationCompleted = false
+        
+        group.enter()
+        
+        home.assignAccessory(accessory, to: room) { error in
+            defer { 
+                if !operationCompleted {
+                    operationCompleted = true
+                    group.leave() 
+                }
+            }
+            
+            if let error = error {
+                asyncResult = "❌ Failed to move \(accessory.name) to \(room.name): \(error.localizedDescription)"
+            } else {
+                asyncResult = "✅ Successfully moved \(accessory.name) to \(room.name)"
+            }
+        }
+        
+        let result = group.wait(timeout: .now() + 5.0)
+        if result == .timedOut {
+            moveResult = "⏰ Operation timed out after 5 seconds - HomeKit may be busy. Try again later."
+            if !operationCompleted {
+                operationCompleted = true
+            }
+        } else {
+            moveResult = asyncResult
+        }
+        
+        let content = [["type": "text", "text": moveResult]]
+        return MCPResponse(jsonrpc: "2.0", id: request.id, 
+                          result: ["content": AnyEncodable(content)], error: nil)
+    }
+    
+    private func handleRenameAccessory(_ request: MCPRequest, arguments: [String: Any]) -> MCPResponse {
+        guard let accessoryName = arguments["accessory_name"] as? String,
+              let newName = arguments["new_name"] as? String else {
+            return MCPResponse(jsonrpc: "2.0", id: request.id, result: nil,
+                              error: MCPError(code: -32602, message: "Missing 'accessory_name' or 'new_name' parameter"))
+        }
+        
+        // Find accessory by name
+        var foundAccessory: HMAccessory?
+        
+        for home in homeManager.homes {
+            if let accessory = home.accessories.first(where: { $0.name.lowercased().contains(accessoryName.lowercased()) }) {
+                foundAccessory = accessory
+                break
+            }
+        }
+        
+        guard let accessory = foundAccessory else {
+            return MCPResponse(jsonrpc: "2.0", id: request.id, result: nil,
+                              error: MCPError(code: -32603, message: "Accessory '\(accessoryName)' not found"))
+        }
+        
+        // Rename the accessory
+        let renameResult: String
+        let group = DispatchGroup()
+        var asyncResult: String = ""
+        var operationCompleted = false
+        
+        group.enter()
+        
+        accessory.updateName(newName) { error in
+            defer { 
+                if !operationCompleted {
+                    operationCompleted = true
+                    group.leave() 
+                }
+            }
+            
+            if let error = error {
+                asyncResult = "❌ Failed to rename '\(accessory.name)' to '\(newName)': \(error.localizedDescription)"
+            } else {
+                asyncResult = "✅ Successfully renamed '\(accessoryName)' to '\(newName)'"
+            }
+        }
+        
+        let result = group.wait(timeout: .now() + 5.0)
+        if result == .timedOut {
+            renameResult = "⏰ Operation timed out after 5 seconds - HomeKit may be busy. Try again later."
+            if !operationCompleted {
+                operationCompleted = true
+            }
+        } else {
+            renameResult = asyncResult
+        }
+        
+        let content = [["type": "text", "text": renameResult]]
+        return MCPResponse(jsonrpc: "2.0", id: request.id, 
+                          result: ["content": AnyEncodable(content)], error: nil)
+    }
+    
+    private func handleRenameRoom(_ request: MCPRequest, arguments: [String: Any]) -> MCPResponse {
+        guard let roomName = arguments["room_name"] as? String,
+              let newName = arguments["new_name"] as? String else {
+            return MCPResponse(jsonrpc: "2.0", id: request.id, result: nil,
+                              error: MCPError(code: -32602, message: "Missing 'room_name' or 'new_name' parameter"))
+        }
+        
+        // Find room by name
+        var foundRoom: HMRoom?
+        
+        for home in homeManager.homes {
+            if let room = home.rooms.first(where: { $0.name.lowercased().contains(roomName.lowercased()) }) {
+                foundRoom = room
+                break
+            }
+        }
+        
+        guard let room = foundRoom else {
+            return MCPResponse(jsonrpc: "2.0", id: request.id, result: nil,
+                              error: MCPError(code: -32603, message: "Room '\(roomName)' not found"))
+        }
+        
+        // Rename the room
+        let renameResult: String
+        let group = DispatchGroup()
+        var asyncResult: String = ""
+        var operationCompleted = false
+        
+        group.enter()
+        
+        room.updateName(newName) { error in
+            defer { 
+                if !operationCompleted {
+                    operationCompleted = true
+                    group.leave() 
+                }
+            }
+            
+            if let error = error {
+                asyncResult = "❌ Failed to rename '\(room.name)' to '\(newName)': \(error.localizedDescription)"
+            } else {
+                asyncResult = "✅ Successfully renamed '\(roomName)' to '\(newName)'"
+            }
+        }
+        
+        let result = group.wait(timeout: .now() + 5.0)
+        if result == .timedOut {
+            renameResult = "⏰ Operation timed out after 5 seconds - HomeKit may be busy. Try again later."
+            if !operationCompleted {
+                operationCompleted = true
+            }
+        } else {
+            renameResult = asyncResult
+        }
+        
+        let content = [["type": "text", "text": renameResult]]
+        return MCPResponse(jsonrpc: "2.0", id: request.id, 
+                          result: ["content": AnyEncodable(content)], error: nil)
+    }
+    
+    private func handleGetRoomAccessories(_ request: MCPRequest, arguments: [String: Any]) -> MCPResponse {
+        guard let roomName = arguments["room_name"] as? String else {
+            return MCPResponse(jsonrpc: "2.0", id: request.id, result: nil,
+                              error: MCPError(code: -32602, message: "Missing 'room_name' parameter"))
+        }
+        
+        // Find room by name
+        var foundRoom: HMRoom?
+        var foundHome: HMHome?
+        
+        for home in homeManager.homes {
+            if let room = home.rooms.first(where: { $0.name.lowercased().contains(roomName.lowercased()) }) {
+                foundRoom = room
+                foundHome = home
+                break
+            }
+        }
+        
+        guard let room = foundRoom, let home = foundHome else {
+            return MCPResponse(jsonrpc: "2.0", id: request.id, result: nil,
+                              error: MCPError(code: -32603, message: "Room '\(roomName)' not found"))
+        }
+        
+        // Get accessories in this room
+        var roomAccessories: [[String: Any]] = []
+        
+        for accessory in home.accessories where accessory.room?.uniqueIdentifier == room.uniqueIdentifier {
+            let categoryName = getCategoryName(for: accessory.category)
+            roomAccessories.append([
+                "name": accessory.name,
+                "uuid": accessory.uniqueIdentifier.uuidString,
+                "category": categoryName,
+                "reachable": accessory.isReachable
+            ])
+        }
+        
+        let content = [
+            [
+                "type": "text",
+                "text": roomAccessories.isEmpty 
+                    ? "No accessories found in room '\(room.name)'"
+                    : "Found \(roomAccessories.count) accessories in '\(room.name)':\n" + 
+                      roomAccessories.map { acc in
+                          let name = acc["name"] as! String
+                          let category = acc["category"] as! String
+                          let uuid = acc["uuid"] as! String
+                          let reachable = acc["reachable"] as! Bool
+                          let status = reachable ? "🟢" : "🔴"
+                          return "• \(name) (\(category)) \(status) - UUID: \(uuid)"
+                      }.joined(separator: "\n")
+            ]
+        ]
+        
+        return MCPResponse(jsonrpc: "2.0", id: request.id, 
+                          result: [
+                            "content": AnyEncodable(content),
+                            "_meta": AnyEncodable([
+                                "room": ["name": room.name, "uuid": room.uniqueIdentifier.uuidString],
+                                "accessories": roomAccessories
+                            ])
+                          ], error: nil)
+    }
+    
+    private func handleAccessoryOn(_ request: MCPRequest, arguments: [String: Any]) -> MCPResponse {
+        guard let accessoryName = arguments["accessory_name"] as? String else {
+            return MCPResponse(jsonrpc: "2.0", id: request.id, result: nil,
+                              error: MCPError(code: -32602, message: "Missing 'accessory_name' parameter"))
+        }
+        
+        return controlAccessory(request: request, accessoryName: accessoryName, action: .turnOn)
+    }
+    
+    private func handleAccessoryOff(_ request: MCPRequest, arguments: [String: Any]) -> MCPResponse {
+        guard let accessoryName = arguments["accessory_name"] as? String else {
+            return MCPResponse(jsonrpc: "2.0", id: request.id, result: nil,
+                              error: MCPError(code: -32602, message: "Missing 'accessory_name' parameter"))
+        }
+        
+        return controlAccessory(request: request, accessoryName: accessoryName, action: .turnOff)
+    }
+    
+    private func handleAccessoryToggle(_ request: MCPRequest, arguments: [String: Any]) -> MCPResponse {
+        guard let accessoryName = arguments["accessory_name"] as? String else {
+            return MCPResponse(jsonrpc: "2.0", id: request.id, result: nil,
+                              error: MCPError(code: -32602, message: "Missing 'accessory_name' parameter"))
+        }
+        
+        return controlAccessory(request: request, accessoryName: accessoryName, action: .toggle)
+    }
+    
+    private enum AccessoryAction {
+        case turnOn, turnOff, toggle
+    }
+    
+    private func controlAccessory(request: MCPRequest, accessoryName: String, action: AccessoryAction) -> MCPResponse {
+        // Find accessory by name
+        var foundAccessory: HMAccessory?
+        
+        for home in homeManager.homes {
+            if let accessory = home.accessories.first(where: { $0.name.lowercased().contains(accessoryName.lowercased()) }) {
+                foundAccessory = accessory
+                break
+            }
+        }
+        
+        guard let accessory = foundAccessory else {
+            return MCPResponse(jsonrpc: "2.0", id: request.id, result: nil,
+                              error: MCPError(code: -32603, message: "Accessory '\(accessoryName)' not found"))
+        }
+        
+        // Find controllable characteristics
+        var controllableCharacteristics: [HMCharacteristic] = []
+        var characteristicType: String = ""
+        
+        for service in accessory.services {
+            // Look for power state characteristic (lights, switches)
+            if let powerChar = service.characteristics.first(where: { 
+                $0.characteristicType == HMCharacteristicTypePowerState 
+            }) {
+                controllableCharacteristics.append(powerChar)
+                characteristicType = "power"
+                break
+            }
+            
+            // Look for brightness characteristic (lights) - indicates dimmable light
+            if let brightnessChar = service.characteristics.first(where: { 
+                $0.characteristicType == HMCharacteristicTypeBrightness 
+            }) {
+                // For dimmable lights, use power state for on/off control
+                if let powerChar = service.characteristics.first(where: { 
+                    $0.characteristicType == HMCharacteristicTypePowerState 
+                }) {
+                    controllableCharacteristics.append(powerChar)
+                    characteristicType = "power"
+                    break
+                }
+            }
+            
+            // Look for target position characteristic (covers, blinds)
+            if let positionChar = service.characteristics.first(where: { 
+                $0.characteristicType == HMCharacteristicTypeTargetPosition 
+            }) {
+                controllableCharacteristics.append(positionChar)
+                characteristicType = "position"
+                break
+            }
+            
+            // Look for target door state (garage doors)
+            if let doorChar = service.characteristics.first(where: { 
+                $0.characteristicType == HMCharacteristicTypeTargetDoorState 
+            }) {
+                controllableCharacteristics.append(doorChar)
+                characteristicType = "door"
+                break
+            }
+        }
+        
+        guard !controllableCharacteristics.isEmpty else {
+            return MCPResponse(jsonrpc: "2.0", id: request.id, result: nil,
+                              error: MCPError(code: -32603, message: "Accessory '\(accessory.name)' has no controllable characteristics"))
+        }
+        
+        let characteristic = controllableCharacteristics[0]
+        
+        // Determine target value based on action and characteristic type
+        var targetValue: Any
+        var actionDescription: String
+        
+        switch (action, characteristicType) {
+        case (.turnOn, "power"):
+            targetValue = true
+            actionDescription = "turn on"
+        case (.turnOff, "power"):
+            targetValue = false
+            actionDescription = "turn off"
+        case (.turnOn, "position"):
+            targetValue = 100 // Fully open
+            actionDescription = "open"
+        case (.turnOff, "position"):
+            targetValue = 0 // Fully closed
+            actionDescription = "close"
+        case (.turnOn, "door"):
+            targetValue = HMCharacteristicValueDoorState.open.rawValue
+            actionDescription = "open"
+        case (.turnOff, "door"):
+            targetValue = HMCharacteristicValueDoorState.closed.rawValue
+            actionDescription = "close"
+        case (.toggle, _):
+            // For toggle, we need to read current state first
+            guard let currentValue = characteristic.value else {
+                return MCPResponse(jsonrpc: "2.0", id: request.id, result: nil,
+                                  error: MCPError(code: -32603, message: "Cannot read current state of '\(accessory.name)'"))
+            }
+            
+            switch characteristicType {
+            case "power":
+                let currentBool = currentValue as? Bool ?? false
+                targetValue = !currentBool
+                actionDescription = currentBool ? "turn off" : "turn on"
+            case "position":
+                let currentPosition = currentValue as? Int ?? 0
+                targetValue = currentPosition > 50 ? 0 : 100
+                actionDescription = currentPosition > 50 ? "close" : "open"
+            case "door":
+                let currentDoor = currentValue as? Int ?? HMCharacteristicValueDoorState.closed.rawValue
+                targetValue = currentDoor == HMCharacteristicValueDoorState.closed.rawValue ? 
+                    HMCharacteristicValueDoorState.open.rawValue : HMCharacteristicValueDoorState.closed.rawValue
+                actionDescription = currentDoor == HMCharacteristicValueDoorState.closed.rawValue ? "open" : "close"
+            default:
+                return MCPResponse(jsonrpc: "2.0", id: request.id, result: nil,
+                                  error: MCPError(code: -32603, message: "Cannot toggle '\(accessory.name)' - unknown characteristic type"))
+            }
+        default:
+            return MCPResponse(jsonrpc: "2.0", id: request.id, result: nil,
+                              error: MCPError(code: -32603, message: "Invalid action for '\(accessory.name)' - unsupported characteristic type"))
+        }
+        
+        // Execute the control action
+        let controlResult: String
+        let group = DispatchGroup()
+        var asyncResult: String = ""
+        var operationCompleted = false
+        
+        group.enter()
+        
+        characteristic.writeValue(targetValue) { error in
+            defer { 
+                if !operationCompleted {
+                    operationCompleted = true
+                    group.leave() 
+                }
+            }
+            
+            if let error = error {
+                asyncResult = "❌ Failed to \(actionDescription) '\(accessory.name)': \(error.localizedDescription)"
+            } else {
+                asyncResult = "✅ Successfully \(actionDescription) '\(accessory.name)'"
+            }
+        }
+        
+        let result = group.wait(timeout: .now() + 5.0)
+        if result == .timedOut {
+            controlResult = "⏰ Operation timed out after 5 seconds - HomeKit may be busy. Try again later."
+            if !operationCompleted {
+                operationCompleted = true
+            }
+        } else {
+            controlResult = asyncResult
+        }
+        
+        let content = [["type": "text", "text": controlResult]]
         return MCPResponse(jsonrpc: "2.0", id: request.id, 
                           result: ["content": AnyEncodable(content)], error: nil)
     }

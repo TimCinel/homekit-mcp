@@ -54,11 +54,29 @@ struct ContentView: View {
                         .bold()
                         .padding(.top)
                     
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text("• get_all_accessories - List all HomeKit accessories")
-                        Text("• get_all_rooms - List all HomeKit rooms")
-                        Text("• set_accessory_room - Move accessory to different room")
+                    ScrollView {
+                        VStack(alignment: .leading, spacing: 4) {
+                            Group {
+                                Text("• get_all_accessories - List all HomeKit accessories")
+                                Text("• get_all_rooms - List all HomeKit rooms")
+                                Text("• set_accessory_room - Move accessory to different room")
+                                Text("• get_accessory_by_name - Find accessory by name")
+                                Text("• get_room_by_name - Find room by name")
+                            }
+                            Group {
+                                Text("• set_accessory_room_by_name - Move accessory by names")
+                                Text("• rename_accessory - Rename a HomeKit accessory")
+                                Text("• rename_room - Rename a HomeKit room")
+                                Text("• get_room_accessories - Get accessories in a room")
+                                Text("• accessory_on - Turn on lights/switches, open covers")
+                            }
+                            Group {
+                                Text("• accessory_off - Turn off lights/switches, close covers")
+                                Text("• accessory_toggle - Toggle accessory state")
+                            }
+                        }
                     }
+                    .frame(maxHeight: 120)
                     .font(.caption)
                     .foregroundColor(.secondary)
                 }

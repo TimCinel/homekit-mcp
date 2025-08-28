@@ -32,13 +32,13 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
       
-    - name: Setup Swift
-      uses: swift-actions/setup-swift@v1
-      with:
-        swift-version: "5.9"
-    
+    # Use system Swift on macOS
     - name: Run CI Tests
-      run: make test-ci
+      run: |
+        echo "Swift version:"
+        swift --version
+        echo "Running tests..."
+        make test-ci
       
     - name: Validate Swift Package
       run: |

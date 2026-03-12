@@ -1,21 +1,17 @@
-# HomeKit MCP Server
+# HomeKit MCP ... and CLI ... and Room Plan/Apply script
 
 [![GitHub Release](https://img.shields.io/github/v/release/TimCinel/homekit-mcp?style=for-the-badge)](https://github.com/TimCinel/homekit-mcp/releases)
 [![GitHub Activity](https://img.shields.io/github/commit-activity/m/TimCinel/homekit-mcp?style=for-the-badge)](https://github.com/TimCinel/homekit-mcp/commits/main)
 [![License](https://img.shields.io/github/license/TimCinel/homekit-mcp?style=for-the-badge)](LICENSE)
 [![CI](https://img.shields.io/github/actions/workflow/status/TimCinel/homekit-mcp/ci.yml?style=for-the-badge&label=CI)](https://github.com/TimCinel/homekit-mcp/actions/workflows/ci.yml)
 
-HTTP-based Model Context Protocol (MCP) server for HomeKit integration with Claude Code. Provides tools to list and manage HomeKit accessories and rooms.
+HTTP-based Model Context Protocol (MCP) server for HomeKit. Provides tools to list and manage HomeKit accessories and rooms.
+
+Also a CLI for HomeKit.
+
+Also a script to help manage Home Assistant accessories across rooms, which is the actual motivation for all of this.
 
 This is implemented as a macOS app rather than a CLI tool because HomeKit requires a signed binary with proper entitlements that can only be achieved through an Xcode project.
-
-## Features
-
-- HomeKit integration for accessories and rooms
-- Three core tools: list accessories, list rooms, move accessories between rooms  
-- HTTP API with JSON-RPC 2.0 protocol
-- Claude Code compatible MCP transport
-- Local-only operation
 
 ## Prerequisites
 
@@ -40,32 +36,7 @@ Add to Claude Code:
 claude mcp add --transport http homekit http://localhost:8080/mcp
 ```
 
-## CLI Wrapper
-
-If you would rather script against the HTTP service directly, use the lightweight Python CLI in [scripts/homekitctl.py](scripts/homekitctl.py). It uses only the Python standard library, so it can run from non-macOS machines as long as they can reach the Mac host over HTTP.
-
-```bash
-python3 scripts/homekitctl.py --server http://mac-mini.local:8080 rooms
-python3 scripts/homekitctl.py --server http://mac-mini.local:8080 accessories
-python3 scripts/homekitctl.py --server http://mac-mini.local:8080 find-accessory "Desk Lamp"
-python3 scripts/homekitctl.py --server http://mac-mini.local:8080 move "Desk Lamp" Office
-python3 scripts/homekitctl.py --server http://mac-mini.local:8080 on "Desk Lamp"
-```
-
-The CLI talks to `http://localhost:8080` by default. Override it with `--server` or `HOMEKIT_MCP_URL`:
-
-```bash
-python3 scripts/homekitctl.py --server http://localhost:8080 rooms
-HOMEKIT_MCP_URL=http://mac-mini.local:8080 python3 scripts/homekitctl.py tools
-```
-
-For anything not covered by the convenience commands, use raw tool calls:
-
-```bash
-python3 scripts/homekitctl.py --server http://mac-mini.local:8080 call rename_room room_name=Office new_name=Study
-```
-
-## Available Tools
+## Available MCP Tools
 
 | Tool | Description | Parameters |
 |------|-------------|------------|
@@ -81,6 +52,85 @@ python3 scripts/homekitctl.py --server http://mac-mini.local:8080 call rename_ro
 | `accessory_on` | Turn on an accessory (lights, switches) or open covers | `accessory_name` |
 | `accessory_off` | Turn off an accessory (lights, switches) or close covers | `accessory_name` |
 | `accessory_toggle` | Toggle an accessory between on/off or open/close | `accessory_name` |
+
+## Available CLI Tools
+
+### CLI Wrapper
+
+If you would rather script against the HTTP service directly, use the lightweight Python CLI in [scripts/homekitctl.py](scripts/homekitctl.py). It uses only the Python standard library, so it can run from non-macOS machines as long as they can reach the Mac host over HTTP.
+
+```bash
+scripts/homekitctl.py --server http://mac-mini.local:8080 rooms
+scripts/homekitctl.py --server http://mac-mini.local:8080 accessories
+scripts/homekitctl.py --server http://mac-mini.local:8080 find-accessory "Desk Lamp"
+scripts/homekitctl.py --server http://mac-mini.local:8080 move "Desk Lamp" Office
+scripts/homekitctl.py --server http://mac-mini.local:8080 on "Desk Lamp"
+```
+
+The CLI talks to `http://localhost:8080` by default. Override it with `--server` or `HOMEKIT_MCP_URL`:
+
+```bash
+python3 scripts/homekitctl.py --server http://localhost:8080 rooms
+HOMEKIT_MCP_URL=http://mac-mini.local:8080 python3 scripts/homekitctl.py tools
+```
+
+For anything not covered by the convenience commands, use raw tool calls:
+
+```bash
+scripts/homekitctl.py --server http://mac-mini.local:8080 call rename_room room_name=Office new_name=Study
+```
+
+### Room Manager - Plan and Apply
+
+It's kind of like Terraform but for your HomeKit?
+
+Features:
+* Use Room/Area from Home Assistant to assign rooms (plan and apply)
+* Back up current state snapshot in CSV
+* Edit state snapshot using text editor
+* Restore state snapshot using CSV
+
+> [!NOTE]
+> In both examples below, **HomeKitMCP.app** is running locally, and the details for Home Assistant
+> are provided in the env.
+
+Prereqs:
+
+```
+$ export HASS_TOKEN=eyJh...o
+$ export HASS_SERVER=https://assistant-home/
+$ export HOMEKIT_MCP_URL=http://localhost:8080
+...
+```
+
+Example plan/apply usage:
+
+```
+$ scripts/manage_homekit_rooms.py
+
+Wrote plan CSV: artifacts/homekit-plan-20260312-223133.csv
+Accessories scanned: 201
+Planned moves: 8
+Dry run only. Re-run with --apply to move accessories.
+
+$ ./manage_homekit_rooms.py --apply-plan artifacts/homekit-plan-20260312-223133.csv
+Loaded plan CSV: artifacts/homekit-plan-20260312-223133.csv
+Rows in plan: 99
+Planned moves: 8
+Moves applied: 8
+Wrote snapshot CSV: artifacts/homekit-snapshot-20260312-223725.csv
+```
+
+Example snapshot usage:
+
+```
+$ ./manage_homekit_rooms.py --restore artifacts/homekit-snapshot-20260312-223725.csv --apply
+Wrote plan CSV: artifacts/homekit-plan-20260312-224133.csv
+Accessories scanned: 201
+Planned moves: 1
+Moves applied: 1
+Wrote snapshot CSV: artifacts/homekit-snapshot-20260312-224133.csv
+```
 
 ## Development
 

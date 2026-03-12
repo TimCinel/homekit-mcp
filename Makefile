@@ -1,6 +1,6 @@
 # HomeKit MCP Server Makefile
 
-.PHONY: build test lint install-deps clean
+.PHONY: build test test-ci lint lint-fix install-deps clean cli
 
 # Build the project
 build:
@@ -14,6 +14,10 @@ test:
 test-ci:
 	@echo "Running CI tests with Swift Package Manager..."
 	swift test
+
+# Run the lightweight CLI against the local HTTP server
+cli:
+	python3 scripts/homekitctl.py --help
 
 # Install SwiftLint (requires Homebrew)
 install-deps:
@@ -52,6 +56,7 @@ help:
 	@echo "  build        - Build the HomeKit MCP Server"
 	@echo "  test         - Run unit tests (requires HomeKit/Mac Catalyst)"
 	@echo "  test-ci      - Run CI-friendly tests (no dependencies)"
+	@echo "  cli          - Show Python CLI help for the HTTP wrapper"
 	@echo "  lint         - Run SwiftLint checks"
 	@echo "  lint-fix     - Fix SwiftLint issues automatically"
 	@echo "  install-deps - Install SwiftLint via Homebrew"

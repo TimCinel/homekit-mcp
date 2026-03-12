@@ -40,6 +40,31 @@ Add to Claude Code:
 claude mcp add --transport http homekit http://localhost:8080/mcp
 ```
 
+## CLI Wrapper
+
+If you would rather script against the HTTP service directly, use the lightweight Python CLI in [scripts/homekitctl.py](scripts/homekitctl.py). It uses only the Python standard library, so it can run from non-macOS machines as long as they can reach the Mac host over HTTP.
+
+```bash
+python3 scripts/homekitctl.py --server http://mac-mini.local:8080 rooms
+python3 scripts/homekitctl.py --server http://mac-mini.local:8080 accessories
+python3 scripts/homekitctl.py --server http://mac-mini.local:8080 find-accessory "Desk Lamp"
+python3 scripts/homekitctl.py --server http://mac-mini.local:8080 move "Desk Lamp" Office
+python3 scripts/homekitctl.py --server http://mac-mini.local:8080 on "Desk Lamp"
+```
+
+The CLI talks to `http://localhost:8080` by default. Override it with `--server` or `HOMEKIT_MCP_URL`:
+
+```bash
+python3 scripts/homekitctl.py --server http://localhost:8080 rooms
+HOMEKIT_MCP_URL=http://mac-mini.local:8080 python3 scripts/homekitctl.py tools
+```
+
+For anything not covered by the convenience commands, use raw tool calls:
+
+```bash
+python3 scripts/homekitctl.py --server http://mac-mini.local:8080 call rename_room room_name=Office new_name=Study
+```
+
 ## Available Tools
 
 | Tool | Description | Parameters |

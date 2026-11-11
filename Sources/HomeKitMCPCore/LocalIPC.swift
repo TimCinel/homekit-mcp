@@ -243,4 +243,18 @@ final class MCPLocalServer {
     }
     deinit { stop() }
 }
+/// One native room editor process owns the local recovery ledger at a time.
+final class RoomEditorInstanceLock {
+    private let fd: Int32
+    init(directory: URL) throws {
+        var st = stat()
+        guard lstat(directory.path, &st) == 0, st.st_uid == geteuid(), (st.st_mode & S_IFMT) == S_IFDIR, st.st_mode & 0o777 == 0o700 else { throw MCPWireError.invalidFrame }
+        fd = Darwin.open(directory.appendingPathComponent("editor.lock").path, O_RDWR | O_CREAT | O_NOFOLLOW, 0o600)
+        guard fd >= 0 else { throw MCPWireError.invalidFrame }
+        guard fstat(fd, &st) == 0, (st.st_mode & S_IFMT) == S_IFREG, st.st_uid == geteuid(), st.st_mode & 0o777 == 0o600, flock(fd, LOCK_EX | LOCK_NB) == 0 else {
+            Darwin.close(fd); throw MCPWireError.invalidFrame
+        }
+    }
+    deinit { Darwin.close(fd) }
+}
 #endif

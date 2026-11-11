@@ -1,14 +1,40 @@
-# HomeKit MCP — secure local preview
+# HomeKit room editor and MCP security preview
 
-This draft replaces the unauthenticated HTTP server with an owner-only Unix socket
-and an MCP **2026-07-28** stdio relay. It is deliberately **read-only**: only
-`get_all_accessories` and `get_all_rooms` are exposed. There is no HomeKit mutation
-code, network listener, API password, bearer token, telemetry, or automatic startup.
+The Mac-local room editor imports Home Assistant names and areas, matches them to
+one selected HomeKit home, and prepares a reviewable room plan. HomeKit data and
+recovery records remain on the Mac. Existing destination rooms bind exact UUIDs;
+missing rooms are created separately before a new reviewed plan can run. A pilot
+move, sequential assignments, refreshed inventory verification and scoped recovery
+replace the previous bulk substring-based mutations.
 
-**Do not deploy until signed Catalyst sandbox and container-access checks pass.**
-An unsigned compile and native tests do not establish actual HomeKit authorization.
-This is a breaking security preview, not a drop-in update to the old HTTP API.
-Read [the security assessment](docs/SECURITY-REVIEW.md) before use.
+**Not yet validated for production deployment.** Signed authorization, a verified
+pilot and recovery on a real home remain required gates. Do not equate passing
+unit tests, a signed build, or certificate creation with verified room changes.
+Read [the security review](docs/SECURITY-REVIEW.md) and
+[Apple licensing constraints](docs/APPLE-TERMS.md).
+
+The secure MCP2026-07-28 protocol core and read-only inventory transport remain
+available for local development, but the default app does **not** start them.
+There are no TCP listeners or remote room-write tools. Do not use the inventory
+relay to export HomeKit information off the Apple device. See Apple's restrictions.
+
+## Local room workflow
+
+1. Sign and provision normally; launch on the Mac and connect through its HomeKit
+   permission prompt. Select exactly one home.
+2. Import HA-only JSON schema2 (`items` contain `sourceID`, `names`, `targetRoom`).
+   `sourceID` is a stable opaque HA device identity, never a HomeKit ID or credential.
+3. Review home/accessory IDs and room targets. Generic names, shared aliases and
+   conflicting HA source/area matches are excluded. Failed imports invalidate old plans.
+4. If needed, create the missing destination rooms, then review the refreshed plan.
+5. Move one item first. Verify its result before applying the remaining reviewed moves.
+6. Recovery records stay under the app's sandbox Application Support/RoomMoveRecovery
+   with directory0700/files0600. Open a submitted or verified receipt to prepare an
+   exact-UUID reverse move after fresh reconciliation. No rooms are deleted.
+
+A timeout does not cancel HomeKit. Pending operations are persisted and quarantined;
+an unknown outcome cannot be retried merely by restarting the app. Corrupt journals
+fail closed. All windows share one coordinator and one process owns the journal.
 
 ## Build and authorize
 
@@ -16,7 +42,7 @@ Use macOS with Xcode, an Apple Account/development team, and HomeKit configured.
 Open `HomeKitSync.xcodeproj`, choose your own team under Signing & Capabilities,
 and provision normally. Do not disable the sandbox or grant broad filesystem
 access to work around a denied socket. The HomeKit entitlement and app sandbox
-are required; the app starts stopped until the owner clicks Start Server.
+are required; access begins only after Connect to HomeKit.
 
 Build-only verification, without launching or granting HomeKit access:
 
@@ -30,9 +56,9 @@ python3 -m unittest discover -s tests -v
 If Xcode is installed but Command Line Tools are selected, set `DEVELOPER_DIR` for
 these commands to the installed Xcode Developer directory; no global change needed.
 
-## MCP connection
+## Local-development MCP connection (not started by the default app)
 
-After signed validation and owner authorization, use a standard stdio MCP client:
+For a separately reviewed local-development transport, use a standard stdio client on the Mac:
 
 ```json
 {
@@ -60,10 +86,9 @@ If you change the bundle ID, explicitly pass the verified container socket via
 The server also checks the connecting effective UID. Container privacy access
 from a terminal/SSH session must be verified; it is not guaranteed by native tests.
 
-For remote use, run the stdio relay on the Mac through an already configured,
-pinned-host SSH connection with BatchMode, StrictHostKeyChecking, ForwardAgent=no,
-and ClearAllForwardings=yes. No TCP port forwarding or API token is needed.
-Do not put account passwords or verification codes in MCP configuration.
+Do not use an SSH relay to export HomeKit-derived inventory off the Apple device.
+A local socket is a security boundary, not a licensing exception. No credentials
+or verification codes belong in MCP configuration.
 
 Read-only convenience commands on the Mac:
 
@@ -76,8 +101,7 @@ python3 scripts/homekitctl.py accessories
 Home/room/device names are private, untrusted data. Keep returned inventories out
 of public issues and logs. The relay does not retry requests after ambiguous errors.
 The old HTTP routes, SSE endpoint, device controls, renames and bulk room-management
-workflow are removed in this preview. Restoring writes needs a separate reviewed,
-scoped owner-approval policy and actual HomeKit persistence verification.
+workflow are removed in this preview. MCP writes remain disabled; the native editor handles owner-reviewed room changes locally.
 
 The Unix socket protects against LAN clients, websites and different OS users.
 It does **not** isolate the server from malicious software running as the same

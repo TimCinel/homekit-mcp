@@ -23,6 +23,6 @@
 	<key>LSUIElement</key>
 	<false/>
 	<key>NSHomeKitUsageDescription</key>
-	<string>HomeKitMCP needs access to your HomeKit accessories to provide MCP server functionality.</string>
+	<string>Match accessories to Home Assistant rooms and apply locally reviewed room changes. HomeKit records and recovery files stay on this Mac.</string>
 </dict>
 </plist>

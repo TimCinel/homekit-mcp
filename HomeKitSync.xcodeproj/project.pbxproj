@@ -15,6 +15,7 @@
 		D12345678901234567890164 /* CITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D12345678901234567890165 /* CITests.swift */; };
 		D12345678901234567890180 /* ModernMCP.swift in Sources */ = {isa = PBXBuildFile; fileRef = D12345678901234567890190; };
 		D12345678901234567890181 /* LocalIPC.swift in Sources */ = {isa = PBXBuildFile; fileRef = D12345678901234567890191; };
+		D12345678901234567890182 /* RoomMovePolicy.swift in Sources */ = {isa = PBXBuildFile; fileRef = D12345678901234567890192; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,6 +41,7 @@
 		D12345678901234567890165 /* CITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CITests.swift; sourceTree = "<group>"; };
 		D12345678901234567890190 /* ModernMCP.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/HomeKitMCPCore/ModernMCP.swift; sourceTree = SOURCE_ROOT; };
 		D12345678901234567890191 /* LocalIPC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/HomeKitMCPCore/LocalIPC.swift; sourceTree = SOURCE_ROOT; };
+		D12345678901234567890192 /* RoomMovePolicy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/HomeKitMCPCore/RoomMovePolicy.swift; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -200,6 +202,7 @@
 			files = (
 				D12345678901234567890123 /* MCPApp.swift in Sources */,
 				D12345678901234567890143 /* MCPServer.swift in Sources */,
+				D12345678901234567890182 /* RoomMovePolicy.swift in Sources */,
 				D12345678901234567890181 /* LocalIPC.swift in Sources */,
 				D12345678901234567890180 /* ModernMCP.swift in Sources */,
 				D12345678901234567890147 /* HTTPMCPServer.swift in Sources */,

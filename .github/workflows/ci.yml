@@ -1,71 +1,28 @@
-name: CI
+name: Build and security regression tests
 
 on:
   push:
-    branches: [ main, master, develop ]
+    branches: [main, master, develop, 'security/**']
   pull_request:
-    branches: [ main, master ]
   workflow_dispatch:
-  schedule:
-    - cron: "0 0 * * *"  # Daily at midnight UTC
+
+permissions:
+  contents: read
 
 jobs:
-  lint:
-    name: Lint
+  verify:
     runs-on: macos-latest
-    
+    timeout-minutes: 15
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-      
-    - name: Install SwiftLint
-      run: brew install swiftlint
-    
-    - name: Run SwiftLint
-      run: make lint
-
-  test-macos:
-    name: Test (macOS)
-    runs-on: macos-latest
-    
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-      
-    # Use system Swift on macOS
-    - name: Run CI Tests
-      run: |
-        echo "Swift version:"
-        swift --version
-        echo "Running tests..."
-        make test-ci
-      
-    - name: Validate Swift Package
-      run: |
-        swift package describe
-        swift build
-
-
-  build-validation:
-    name: Build Validation
-    runs-on: macos-latest
-    
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-      
-    - name: Setup Xcode
-      uses: maxim-lobanov/setup-xcode@v1
-      with:
-        xcode-version: latest-stable
-        
-    - name: Validate Xcode Project
-      run: |
-        xcodebuild -list
-        xcodebuild -project HomeKitSync.xcodeproj -scheme HomeKitSync -destination 'platform=macOS,variant=Mac Catalyst' -dry-run
-      continue-on-error: true  # HomeKit signing issues expected in CI
-      
-    - name: Check Project Structure
-      run: |
-        ls -la
-        find . -name "*.swift" | head -10
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Test production protocol and Unix transport without HomeKit
+        run: swift test
+      - name: Test stdio relay security regressions
+        run: python3 -m unittest discover -s tests -v
+      - name: Build actual Catalyst app without signing or running
+        run: >-
+          xcodebuild -project HomeKitSync.xcodeproj -scheme HomeKitSync
+          -configuration Debug -destination 'platform=macOS,variant=Mac Catalyst'
+          CODE_SIGNING_ALLOWED=NO build

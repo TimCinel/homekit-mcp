@@ -1,3 +1,11 @@
 CLAUDE.md
 .build/
 build/
+
+__pycache__/
+*.py[cod]
+.env
+env.source
+artifacts/
+*.xcuserstate
+xcuserdata/

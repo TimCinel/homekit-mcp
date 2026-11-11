@@ -13,6 +13,8 @@
 		D12345678901234567890149 /* HTTPMCPServerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D12345678901234567890150 /* HTTPMCPServerTests.swift */; };
 		D12345678901234567890151 /* HomeKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D12345678901234567890152 /* HomeKitManager.swift */; };
 		D12345678901234567890164 /* CITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D12345678901234567890165 /* CITests.swift */; };
+		D12345678901234567890180 /* ModernMCP.swift in Sources */ = {isa = PBXBuildFile; fileRef = D12345678901234567890190; };
+		D12345678901234567890181 /* LocalIPC.swift in Sources */ = {isa = PBXBuildFile; fileRef = D12345678901234567890191; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,6 +38,8 @@
 		D12345678901234567890152 /* HomeKitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeKitManager.swift; sourceTree = "<group>"; };
 		D12345678901234567890153 /* HomeKitSyncTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HomeKitSyncTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D12345678901234567890165 /* CITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CITests.swift; sourceTree = "<group>"; };
+		D12345678901234567890190 /* ModernMCP.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/HomeKitMCPCore/ModernMCP.swift; sourceTree = SOURCE_ROOT; };
+		D12345678901234567890191 /* LocalIPC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/HomeKitMCPCore/LocalIPC.swift; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -196,6 +200,8 @@
 			files = (
 				D12345678901234567890123 /* MCPApp.swift in Sources */,
 				D12345678901234567890143 /* MCPServer.swift in Sources */,
+				D12345678901234567890181 /* LocalIPC.swift in Sources */,
+				D12345678901234567890180 /* ModernMCP.swift in Sources */,
 				D12345678901234567890147 /* HTTPMCPServer.swift in Sources */,
 				D12345678901234567890151 /* HomeKitManager.swift in Sources */,
 			);
@@ -346,7 +352,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = HomeKitSync/HomeKitSync.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = BJQXT5H782;
+				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = HomeKitSync/Info.plist;
 				INFOPLIST_KEY_NSHomeKitUsageDescription = "HomeKitMCP needs access to your HomeKit accessories.";
@@ -370,7 +376,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = HomeKitSync/HomeKitSync.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = BJQXT5H782;
+				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = HomeKitSync/Info.plist;
 				INFOPLIST_KEY_NSHomeKitUsageDescription = "HomeKitMCP needs access to your HomeKit accessories.";
@@ -395,7 +401,7 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = BJQXT5H782;
+				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
@@ -417,7 +423,7 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = BJQXT5H782;
+				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
